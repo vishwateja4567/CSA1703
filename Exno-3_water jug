@@ -1,0 +1,50 @@
+print("192311399 - M.Viswa teja")
+from collections import deque
+
+def is_goal(state, target):
+    return target in state
+
+def get_successors(state, x, y):
+    a, b = state
+    return [
+        (x, b),             
+        (a, y),             
+        (0, b),            
+        (a, 0),            
+        (min(a + b, x), max(0, a + b - x)),  
+        (max(0, a + b - y), min(a + b, y))   
+    ]
+
+def bfs_water_jug(x, y, target):
+    visited = set()
+    queue = deque()
+    queue.append(((0, 0), [])) 
+
+    while queue:
+        (curr, path) = queue.popleft()
+
+        if curr in visited:
+            continue
+
+        visited.add(curr)
+        path = path + [curr]
+
+        if is_goal(curr, target):
+            print("\n Solution found:")
+            for step in path:
+                print(f"Jug1: {step[0]}L, Jug2: {step[1]}L")
+            return
+
+        for succ in get_successors(curr, x, y):
+            if succ not in visited:
+                queue.append((succ, path))
+
+    print("\n No solution found.")
+
+try:
+    x = int(input("Enter capacity of Jug1: "))
+    y = int(input("Enter capacity of Jug2: "))
+    target = int(input("Enter target amount of water: "))
+    bfs_water_jug(x, y, target)
+except ValueError:
+    print("Please enter valid integers.")
