@@ -1,0 +1,54 @@
+from queue import Queue
+print("192311399-M.Viswa teja")
+def is_valid_state(state):
+    m, c, b = state
+    # Check if the state is valid (no negative values, no invalid conditions)
+    if m < 0 or c < 0 or m > 3 or c > 3 or (m != 0 and m < c) or (m != 3 and m > c):
+        return False
+    return True
+
+def successors(state):
+    m, c, b = state
+    children = []
+    # Explore all possible moves (1 or 2 people can be in the boat)
+    for new_m in range(4):  # Number of missionaries to move
+        for new_c in range(4):  # Number of cannibals to move
+            if 1 <= new_m + new_c <= 2:  # Boat can carry 1 or 2 people
+                # Calculate new state based on boat direction (0 = left, 1 = right)
+                new_state = (m + (-1)**b * new_m, c + (-1)**b * new_c, 1 - b)
+                if is_valid_state(new_state):
+                    children.append(new_state)
+    return children
+
+def bfs():
+    start = (3, 3, 1)  # Starting state: 3 missionaries, 3 cannibals, boat on the right (1)
+    goal = (0, 0, 0)  # Goal state: 0 missionaries, 0 cannibals, boat on the left (0)
+    frontier = Queue()  # BFS queue
+    frontier.put([start])  # Initialize with the start state
+    
+    while not frontier.empty():
+        path = frontier.get()  # Get the next path to explore
+        current_state = path[-1]  # Current state is the last element of the path
+        
+        # If the goal is reached, return the path
+        if current_state == goal:
+            return path
+        
+        # Expand all valid successors
+        for child in successors(current_state):
+            if child not in [state[-1] for state in frontier.queue]:  # Avoid cycles
+                new_path = list(path)
+                new_path.append(child)
+                frontier.put(new_path)  # Add new path to the queue
+    
+    return None  # If no solution is found
+
+# Run BFS to find the solution
+solution = bfs()
+if solution:
+    print("Missionaries and Cannibals Solution:")
+    for i, state in enumerate(solution):
+        m, c, b = state
+        print(f"Step {i}: Left[{3-m}M,{3-c}C] ---({'left' if b == 0 else 'right'})---> Right[{m}M,{c}C]")
+else:
+    print("No solution found.")
