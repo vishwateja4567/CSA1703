@@ -1,0 +1,48 @@
+# Define the environment
+class Environment:
+    print("192311399-M.Viswateja")
+    def __init__(self, state):
+        # state = {'A': 'Dirty' or 'Clean', 'B': 'Dirty' or 'Clean'}
+        self.state = state
+        self.vacuum_location = 'A'  # Starting position
+
+    def is_dirty(self, location):
+        return self.state[location] == 'Dirty'
+
+    def clean(self, location):
+        print(f"Cleaning location {location}")
+        self.state[location] = 'Clean'
+
+    def move(self, direction):
+        if direction == 'Right':
+            self.vacuum_location = 'B'
+        elif direction == 'Left':
+            self.vacuum_location = 'A'
+        print(f"Moving to location {self.vacuum_location}")
+
+# Define the vacuum cleaner agent
+class VacuumCleanerAgent:
+    def __init__(self, environment):
+        self.env = environment
+
+    def run(self):
+        for _ in range(2):  # Maximum two moves (A and B)
+            location = self.env.vacuum_location
+            print(f"Vacuum is at location {location}, which is {self.env.state[location]}")
+            if self.env.is_dirty(location):
+                self.env.clean(location)
+            else:
+                print(f"Location {location} is already clean")
+            
+            # Move to the other room
+            if location == 'A':
+                self.env.move('Right')
+            else:
+                self.env.move('Left')
+        print("\nFinal state of the environment:", self.env.state)
+
+# Example usage
+initial_state = {'A': 'Dirty', 'B': 'Dirty'}  # Change values to test other scenarios
+env = Environment(initial_state)
+agent = VacuumCleanerAgent(env)
+agent.run()
