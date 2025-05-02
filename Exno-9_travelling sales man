@@ -1,0 +1,36 @@
+from itertools import permutations
+print("192311399-M.Viswa teja")
+# Function to calculate total distance of a path
+def calculate_path_cost(graph, path):
+    cost = 0
+    for i in range(len(path) - 1):
+        cost += graph[path[i]][path[i + 1]]
+    cost += graph[path[-1]][path[0]]  # return to starting city
+    return cost
+
+# Travelling Salesman Problem (Brute Force)
+def tsp(graph):
+    cities = list(range(len(graph)))
+    min_path = None
+    min_cost = float('inf')
+
+    for perm in permutations(cities):
+        current_cost = calculate_path_cost(graph, perm)
+        if current_cost < min_cost:
+            min_cost = current_cost
+            min_path = perm
+
+    return min_path, min_cost
+
+# Example Graph (Adjacency Matrix)
+graph = [
+    [0, 10, 15, 20],
+    [10, 0, 35, 25],
+    [15, 35, 0, 30],
+    [20, 25, 30, 0]
+]
+
+# Solve TSP
+path, cost = tsp(graph)
+print("Minimum Cost Path:", path)
+print("Minimum Cost:", cost)
