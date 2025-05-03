@@ -1,0 +1,60 @@
+# Map Coloring using Constraint Satisfaction Problem (CSP)
+# Problem: Color each region so that no adjacent regions share the same color
+print("192311399-M.Viswa teja")
+# Define the regions (variables)
+regions = ['WA', 'NT', 'SA', 'Q', 'NSW', 'V', 'T']
+
+# Define possible colors (domain)
+colors = ['Red', 'Green', 'Blue']
+
+# Define adjacency constraints (neighbors)
+neighbors = {
+    'WA': ['NT', 'SA'],
+    'NT': ['WA', 'SA', 'Q'],
+    'SA': ['WA', 'NT', 'Q', 'NSW', 'V'],
+    'Q': ['NT', 'SA', 'NSW'],
+    'NSW': ['Q', 'SA', 'V'],
+    'V': ['SA', 'NSW'],
+    'T': []
+}
+
+# Function to check if the color assignment is consistent
+def is_consistent(region, color, assignment):
+    for neighbor in neighbors[region]:
+        if neighbor in assignment and assignment[neighbor] == color:
+            return False
+    return True
+
+# Backtracking search algorithm
+def backtrack(assignment):
+    # If assignment is complete, return it
+    if len(assignment) == len(regions):
+        return assignment
+
+    # Select an unassigned region
+    unassigned = [r for r in regions if r not in assignment]
+    region = unassigned[0]
+
+    for color in colors:
+        if is_consistent(region, color, assignment):
+            # Assign color
+            assignment[region] = color
+
+            # Recur with updated assignment
+            result = backtrack(assignment)
+            if result:
+                return result
+
+            # Backtrack
+            del assignment[region]
+
+    return None
+
+# Solve the problem
+solution = backtrack({})
+if solution:
+    print("Map Coloring Solution:")
+    for region in regions:
+        print(f"{region}: {solution[region]}")
+else:
+    print("No solution found.")
