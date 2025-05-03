@@ -1,0 +1,15 @@
+b = [[" "]*3 for _ in range(3)]
+print("192311399-M.Viswateja")
+def show(): [print(" | ".join(r)) for r in b]
+def win(p): return any(all(b[i][j]==p for j in range(3)) or all(b[j][i]==p for j in range(3)) for i in range(3)) or all(b[i][i]==p for i in range(3)) or all(b[i][2-i]==p for i in range(3))
+def full(): return all(c!=" " for r in b for c in r)
+
+p = "X"
+while True:
+    show()
+    r, c = map(int, input(f"{p} turn (row col): ").split())
+    if b[r][c] != " ": print("Try again"); continue
+    b[r][c] = p
+    if win(p): show(); print(f"{p} wins!"); break
+    if full(): show(); print("Draw!"); break
+    p = "O" if p == "X" else "X"
