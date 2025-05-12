@@ -1,0 +1,23 @@
+print(192311399-M.Viswa teja)
+% Count vowels in a string
+
+is_vowel(Char) :-
+    member(Char, [a, e, i, o, u]).
+
+count_vowels([], 0).
+count_vowels([H|T], Count) :-
+    is_vowel(H),
+    count_vowels(T, Rest),
+    Count is Rest + 1.
+
+count_vowels([H|T], Count) :-
+    \+ is_vowel(H),
+    count_vowels(T, Count).
+
+:- initialization(main).
+
+main :-
+    write('192311399-M.Viswa teja'), nl,
+    String = [h, e, l, l, o],
+    count_vowels(String, Count),
+    write('Number of vowels: '), write(Count), nl.
