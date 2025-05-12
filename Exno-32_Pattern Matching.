@@ -1,0 +1,11 @@
+print(192311399-M.Viswa teja)
+% Pattern Matching Example
+
+match([a, b, c]).
+match([a, X, c]) :- write('Matched pattern with variable X = '), write(X), nl.
+
+:- initialization(main).
+
+main :-
+    write('192311399 - M.Viswa teja'), nl,
+    match([a, b, c]).
